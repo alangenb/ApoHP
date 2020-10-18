@@ -179,7 +179,7 @@ for minus0=1:4, site_type = [acgt(minus0) 'pC'];
   q.([site_type '_rate']) = ssbin.rate(:,minus0);
   q.([site_type '_sd']) = ssbin.sd(:,minus0);
 end
-save_struct(q,[outdir '/figureS2b.txt']);
+save_struct(q,[outdir '/figureS2a.txt']);
 
 
 % SUPP FIGURE 2B
