@@ -33,6 +33,17 @@ for minus0=1:4
 end
 [ssbin.rate ssbin.sd] = relative_ratio_and_sd(ssbin.n,ssbin.N,X.cohort.tca_rate(ci));
 save([outdir '/figure2a.mat'],'ssbin');
+% save as textfile version
+q=keep_fields(ssbin,{'min','max','label'});
+acgt='ACGT';
+for minus0=1:4
+  for looppos=1:looplen
+    fld = [acgt(minus0) 'pC_looppos' num2str(looppos)];
+    q.([fld '_rate']) = ssbin.rate(:,looppos,minus0);
+    q.([fld '_sd']) = ssbin.sd(:,looppos,minus0);
+  end
+end
+save_struct(q,[outdir '/figure2a.txt']);
 
 % FIGURE 2B
 
@@ -58,6 +69,21 @@ for minus0=1:4
 end
 [loop.rate loop.sd] = relative_ratio_and_sd(loop.n,loop.N,X.cohort.tca_rate(ci));
 save([outdir '/figure2b.mat'],'loop');
+% save as textfile version
+q=[]; q.minus0=[]; q.looplen=[]; q.looppos=[]; q.rate=[]; q.sd=[];
+acgt='ACGT';
+for minus0=1:4
+  for looplen=minlooplen:maxlooplen
+    for looppos=1:looplen
+      q.minus0(end+1,1) = minus0;
+      q.looplen(end+1,1) = looplen;
+      q.looppos(end+1,1) = looppos;
+      q.rate(end+1,1) = loop.rate(looplen-minlooplen+1,looppos,minus0);
+      q.sd(end+1,1) = loop.sd(looplen-minlooplen+1,looppos,minus0);
+    end
+  end
+end
+save_struct(q,[outdir '/figure2b.txt']);
 
 % FIGURE 3
 
@@ -65,7 +91,13 @@ pat = X.pat;
 pat = sort_struct(pat,'nmut');
 pat = reorder_struct(pat,pat.nmut>=500);
 save([outdir '/figure3.mat'],'pat');
-
+% save as textfile version
+ppp = pat;
+ppp.ttype_clr_red = round(255*ppp.ttype_clr(:,1));
+ppp.ttype_clr_green = round(255*ppp.ttype_clr(:,2));
+ppp.ttype_clr_blue = round(255*ppp.ttype_clr(:,3));
+ppp = rmfield(ppp,{'ttype_clr','ttype_idx','nmf','nmf_norm','nmf_nmut','ci'});
+save_struct(ppp,[outdir '/figure3.txt']);                    
 
 % FIGURE 5
 
@@ -83,7 +115,9 @@ fs=fieldnames(s);for i=1:length(fs),f=fs{i};if isnumeric(s.(f)), s.(f)=double(s.
 s = sort_struct(s,'max_apo10_pct',-1);
 s = reorder_struct(s,1:100);
 save([outdir '/figure5.mat'],'s');
-
+% save as textfile version
+ss = rmfield(s,{'n'});
+save_struct(ss,[outdir '/figure5.txt']);
 
 % FIGURE 6
 
@@ -109,8 +143,14 @@ for loop=1:length(loops)
   end
 end
 [ssbin.rate ssbin.sd] = relative_ratio_and_sd(ssbin.n,ssbin.N,X.cohort.tca_rate(ci));
-
 save([outdir '/figure6.mat'],'ssbin','loops');
+% save as textfile version
+q=[]; q.stem_strength_bin = ssbin.label;
+for loop=1:length(loops)
+  q.([loops{loop} '_rate']) = ssbin.rate(:,loop);
+  q.([loops{loop} '_sd']) = ssbin.sd(:,loop);
+end
+save_struct(q,[outdir '/figure6.txt']);
 
 % SUPP FIGURE 2A
 
@@ -131,8 +171,15 @@ for minus0=1:4
   end
 end
 [ssbin.rate ssbin.sd] = relative_ratio_and_sd(ssbin.n,ssbin.N,X.cohort.tca_rate(ci));
-
 save([outdir '/figureS2a.mat'],'ssbin');
+% save as textfile version
+q=[]; q.stem_strength_bin = ssbin.label;
+acgt='ACGT';
+for minus0=1:4, site_type = [acgt(minus0) 'pC'];
+  q.([site_type '_rate']) = ssbin.rate(:,minus0);
+  q.([site_type '_sd']) = ssbin.sd(:,minus0);
+end
+save_struct(q,[outdir '/figureS2A.txt']);
 
 
 % SUPP FIGURE 2B
@@ -160,8 +207,24 @@ for minus0=1:4
   end
 end
 [ssbin.rate ssbin.sd] = relative_ratio_and_sd(ssbin.n,ssbin.N,shiftdim(X.cohort.tca_rate,-2));
-
 save([outdir '/figureS2b.mat'],'ssbin','loops');
+% save as textfile version
+q=[]; q.cohort={}; q.site_type={}; q.stem_strength_bin={}; q.rate=[]; q.sd=[];
+for ci=1:4, li=1;
+  for minus0=1:4
+    for minus1=1:4
+      for i=1:slength(ssbin)
+        q.cohort{end+1,1} = X.cohort.name{ci};
+        q.site_type{end+1,1} = loops{li};
+        q.stem_strength_bin{end+1,1} = ssbin.label{i};
+        q.rate(end+1,1) = ssbin.rate(i,li,ci);
+        q.sd(end+1,1) = ssbin.sd(i,li,ci);
+      end
+      li=li+1;
+    end
+  end
+end
+save_struct(q,[outdir '/figureS2B.txt']);
 
 fprintf('Finished generating data for figures.\n');
 
