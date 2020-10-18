@@ -83,29 +83,28 @@ print_to_file([outdir '/figure2b.pdf']);
 
 % FIGURE 3
 
-load([indir '/figure3.mat'],'X');
-ppp=X.pat;
-ppp.ay = log10(0.01+0.01*rand(slength(ppp),1)+ppp.frac_apobec);
-ppp.ax = ppp.apochar;
+load([indir '/figure3.mat'],'pat');
+pat.ay = pat.logjit_frac_apo;
+pat.ax = pat.apochar;
 abcd='abcd';
 for i=1:4
-  figure(300+i);clf,randinit(1238); fs=35; sz=60; hmin=0.3; hmax=0.7;
+  figure(300+i);clf, fs=35; sz=60; hmin=0.3; hmax=0.7;
   hold on,set(gca,'fontsize',fs);
-  if i==2, ttl='Tumor types';
-    x = ppp.ax; y = ppp.ay; xlab='A3B \leftarrow mutation character \rightarrow A3A'; ylab='% APOBEC mutations';
-    show = true(slength(ppp),1); clr = ppp.ttype_clr;
-  elseif i==1, ttl = 'APOBEC mutations at TpC in DNA hairpins';
-    x = ppp.ax; y = ppp.ay; xlab='A3B \leftarrow mutation character \rightarrow A3A'; ylab='% APOBEC mutations';
-    clr = max(0,min(1,(ppp.pcthp_tpc-hmin)/(hmax-hmin)));
+  if i==1, ttl='Tumor types';
+    x = pat.ax; y = pat.ay; xlab='A3B \leftarrow mutation character \rightarrow A3A'; ylab='% APOBEC mutations';
+    show = true(slength(pat),1); clr = pat.ttype_clr;
+  elseif i==2, ttl = 'APOBEC mutations at TpC in DNA hairpins';
+    x = pat.ax; y = pat.ay; xlab='A3B \leftarrow mutation character \rightarrow A3A'; ylab='% APOBEC mutations';
+    clr = max(0,min(1,(pat.pcthp_tpc-hmin)/(hmax-hmin)));
     show = ~isnan(clr); clr = clr*[1 0 0]; % red
   elseif i==3, ttl = 'APOBEC mutations at VpC in DNA hairpins';
-    x = ppp.ax; y = ppp.ay; xlab='A3B \leftarrow mutation character \rightarrow A3A'; ylab='% APOBEC mutations';
-    clr = max(0,min(1,(ppp.pcthp_vpc-hmin)/(hmax-hmin)));
+    x = pat.ax; y = pat.ay; xlab='A3B \leftarrow mutation character \rightarrow A3A'; ylab='% APOBEC mutations';
+    clr = max(0,min(1,(pat.pcthp_vpc-hmin)/(hmax-hmin)));
     show = ~isnan(clr); clr = clr*[1 0 1]; % magenta
   elseif i==4, ttl = 'TpC and VpC hairpin mutations';
-    x = ppp.pcthp_tpc; xlab = 'TpC % hairpin mutations';
-    y = ppp.pcthp_vpc; ylab = 'VpC % hairpin mutations';
-    clr = ppp.ttype_clr; show = (~isnan(x)&~isnan(y));
+    x = pat.pcthp_tpc; xlab = 'TpC % hairpin mutations';
+    y = pat.pcthp_vpc; ylab = 'VpC % hairpin mutations';
+    clr = pat.ttype_clr; show = (~isnan(x)&~isnan(y));
   else error('?');
   end
   scatter(x(show),y(show),sz,clr(show,:),'filled');ff;set(gca,'fontsize',fs);%title(ttl,'fontsize',fs);
@@ -116,29 +115,29 @@ for i=1:4
   set(gcf,'papersize',[w h],'paperposition',[0.2 0.2 w-0.4 h-0.4]);
   print_to_file([outdir '/figure3' abcd(i) '.pdf']);
 end
+
 % tumor types colors legend
 figure(399),clf,hold on,ff
 u = {'Breast TNBC';'Breast non-TNBC';'Breast';'Bladder';'Cervical';'Lung squamous cell carcinoma';'Lung adenocarcinoma';'Head and neck';'Sarcoma';'Thyroid';
-     'Endometrial';'Colorectal';'Esophageal';'Stomach';'Ovarian';'Liver';'Oral';'Bone';'Glioblastoma multiforme';'Prostate';...
-     'Pancreatic';'Melanoma'};
-ui = listmap(u,ppp.ttype_longname);
-clrs = ppp.ttype_clr(ui,:);
+     'Endometrial';'Colorectal';'Esophageal';'Stomach';'Ovarian';'Liver';'Oral';'Bone';'Glioblastoma multiforme';'Prostate';'Pancreatic';'Melanoma'};
+ui = listmap(u,pat.ttype_longname);
+keep=~isnan(ui);u=u(keep);ui=ui(keep);
+clrs = pat.ttype_clr(ui,:);
 x=1;y=0.1;
-xlim([0 25]);ylim([-0.12 0.12]);set(gca,'visible','off');
 for i=1:length(u)
   scatter(x,y,100,clrs(i,:),'filled');
   text(x+0.03*diff(xlim),y,u{i},'fontsize',15);
   y=y-0.015;
   if i==11, x=x+12;y=0.1; end
 end
-set(gcf,'papersize',[6 6],'paperposition',[0.2 0.2 6-0.4 6-0.4]);
+w=6;h=10;set(gcf,'papersize',[w h],'paperposition',[0.2 0.2 w-0.4 h-0.4]);
 print_to_file([outdir '/figure3.ttype_legend.pdf']);
 
 % FIGURE 5
 
 load([indir '/figure5.mat'],'s');
 
-figure(500),clf,hold on,ff,randinit(1235);set(gca,'fontsize',16);
+figure(500),clf,hold on,ff,set(gca,'fontsize',16);
 set(gcf,'position',[400 0 926 802])
 pause(3);
 x = log10(s.relrate_exp);

@@ -21,15 +21,15 @@ function X = load_mutation_data(infile,refdir,outfile,ttypefile)
 % --> also saves this object X as <outfile>, which will be detected and loaded on future calls.
 
 if nargin<3, error('requires infile, refdir, outfile'); end
-  
-if exist(outfile,'file')
+
+fprintf('Loading mutations.\n');
+
+if exist(outfile,'file') && filedatenum(outfile)>=filedatenum(infile)
   load(outfile,'X');
   return
 end
-  
-X = load_genome_info(refdir);
 
-fprintf('Loading mutations.\n');
+X = load_genome_info(refdir);
 
 X.mut = load_struct(infile);
 demand_fields(X.mut,{'patient','chr','pos','ref','alt'});
@@ -46,12 +46,13 @@ else
 end
 [X.ttype.name ui X.pat.ttype_idx] = unique(X.pat.ttype);
 if exist('ttypefile','var') && exist(ttypefile,'file')
+  fprintf('Processing tumor types.\n');
   tt = load_struct(ttypefile);
   demand_fields(tt,{'name','longname','red','green','blue'});
   tt = make_numeric(tt,{'red','green','blue'});
-  tt.clr = [tt.red tt.green tt.blue];
+  tt.clr = [tt.red tt.green tt.blue]; 
   X.ttype = mapinto(X.ttype,tt,'name',{'longname','clr'});
-  X.ttype.clr(isnan(X.ttype.clr))=0.6;
+  if all(isnan(X.ttype.clr(:))), X.ttype.clr = repmat([0.6 0.6 0.6],slength(X.ttype),1); end
 else
   X.ttype.longname = repmat({'---'},slength(X.ttype),1);
   X.ttype.clr = repmat([0.6 0.6 0.6],slength(X.ttype),1);

@@ -21,7 +21,7 @@ X.ssbin.min = [0 4:22]';
 X.ssbin.max = [3 4:21 inf]';
 X.site.ssbin = min(max(1,X.site.ss-3),slength(X.ssbin));
 
-% APOBEC cohorts
+% define APOBEC cohorts
 X.cohort=[]; X.cohort.name={}; X.cohort.puse=logical([]);
 X.cohort.name{end+1,1}='APOBEC>=90%, MSUPE-';          X.cohort.puse(end+1,:)=(puse & X.pat.frac_apobec>=0.9);
 X.cohort.name{end+1,1}='APOBEC>=50% and <90%. MSUPE-'; X.cohort.puse(end+1,:)=(puse & X.pat.frac_apobec>=0.5 & X.pat.frac_apobec<0.9);

@@ -34,7 +34,6 @@ end
 [ssbin.rate ssbin.sd] = relative_ratio_and_sd(ssbin.n,ssbin.N,X.cohort.tca_rate(ci));
 save([outdir '/figure2a.mat'],'ssbin');
 
-
 % FIGURE 2B
 
 minlooplen = 3;
@@ -70,21 +69,15 @@ save([outdir '/figure3.mat'],'pat');
 
 % FIGURE 5
 
-wgs_puse = (X.pat.frac_apobec>=0.1);
-X.site.wgs_apo10_ct = histc(X.mut.site_idx(wgs_puse(X.mut.pat_idx)),1:slength(X.site));
-X.site.wgs_apo10_pct = 100*X.site.wgs_apo10_ct/sum(wgs_puse);
-if isfield(X,'wxs')   % WXS provided
-  wxs_puse = (X.wxs.pat.frac_apobec>=0.1);
-  X.site.wxs_apo10_ct = histc(X.wxs.mut.site_idx(wxs_puse(X.wxs.mut.pat_idx)),1:slength(X.site));
-  X.site.wxs_apo10_pct = 100*X.site.wxs_apo10_ct/sum(wxs_puse);
+if isfield(X.site,'wxs_apo10_ct')   % WXS provided
   X.site.max_apo10_pct = max(X.site.wgs_apo10_pct,X.site.wxs_apo10_pct);
   X.site.max_apo10_ct = max(X.site.wgs_apo10_ct,X.site.wxs_apo10_ct);
-else                  % WXS not provided
+else                                % WXS not provided
   X.site.max_apo10_pct = X.site.wgs_apo10_pct;
   X.site.max_apo10_ct = X.site.wgs_apo10_ct;
 end
-s=reorder_struct(X.site,X.site.max_apo10_ct>=2);
-s.known_driver=nansub(X.gene.known_driver,s.gene);
+s = reorder_struct(X.site,X.site.max_apo10_ct>=2);
+s.known_driver = nansub(X.gene.known_driver,s.gene);
 s.gene = nansub(X.gene.name,s.gene);
 fs=fieldnames(s);for i=1:length(fs),f=fs{i};if isnumeric(s.(f)), s.(f)=double(s.(f)); end, end
 s = sort_struct(s,'max_apo10_pct',-1);

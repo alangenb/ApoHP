@@ -13,8 +13,9 @@ demand_fields(X.mut,{'pat_idx','alt','context65','f','t','l','r','ll','rr'});
 if ~isnumeric(X.mut.pat_idx), error('pat_idx should be numeric'); end
 if ~isnumeric(X.mut.alt), error('alt should be numeric'); end
 if ~isnumeric(X.mut.context65), error('context65 should be numeric'); end
-if ~isnumeric(k), error('k should be numeric'); end
-if k<2 || k>1000, error('invalid k'); end
+if ~isnumeric(k), k = num2str(k); end
+if isnan(k), error('k should be numeric'); end
+if ~(k>=2 && k<=1000), error('k should be 2-1000'); end
 
 % compute Gordenin A3A/A3B (YTCA/RTCA) metrics
 c2gt = (X.mut.f==2 & X.mut.t~=1);
@@ -56,39 +57,39 @@ X = rmfield_if_exist(X,'nmf');
 X.pat = mapinto(X.pat,N.pat,'name',{'nmf','nmf_norm','nmf_nmut'});
 X.nmf.chan = N.chan;
 
-% ANALYZE signatures if list of reference signatures provided
-if exist('sigfile','var')
-  if ~exist(sigfile,'file'), error('Sig file does not exist: %s\n',sigfile); end
+% ANALYZE signatures
+if ~exist(sigfile,'file'), error('Sig file does not exist: %s\n',sigfile); end
   
-  % load reference signatures file
-  S=load(sigfile,'X');S=S.X;
-  demand_fields(S,{'chan','factor'});
-  demand_fields(S.chan,{'catnames','nmf'});
-  map = listmap(X.nmf.chan.catnames,S.chan.catnames);
-  if any(isnan(map)) || length(unique(map))~=96, error('problem with sigfile'); end
-  S.chan = reorder_struct(S.chan,map); 
+% load reference signatures file
+S=load(sigfile,'X');S=S.X;
+demand_fields(S,{'chan','factor'});
+demand_fields(S.chan,{'catnames','nmf'});
+map = listmap(X.nmf.chan.catnames,S.chan.catnames);
+if any(isnan(map)) || length(unique(map))~=96, error('problem with sigfile'); end
+S.chan = reorder_struct(S.chan,map); 
 
-  % compute all cosine distances
-  for xi=k:-1:1
-    us = X.nmf.chan.nmf_norm(:,xi);
-    for si=slength(S.factor):-1:1
-      them = S.chan.nmf(:,si); them=them/sum(them);
-      S.factor.cos(si,xi) = sum(us.*them)/sqrt(sum(us.^2)*sum(them.^2));
-    end
+% compute all cosine distances
+for xi=k:-1:1
+  us = X.nmf.chan.nmf_norm(:,xi);
+  for si=slength(S.factor):-1:1
+    them = S.chan.nmf(:,si); them=them/sum(them);
+    S.factor.cos(si,xi) = sum(us.*them)/sqrt(sum(us.^2)*sum(them.^2));
   end
-
-  % find closest reference sequence (by cosine distance)
-  [mx ord] = max(S.factor.cos,[],1);
-  X.nmf.factor.name = S.factor.name(ord);
-  X.nmf.factor.cos = as_column(mx);
-
-  % signature(s) to define the APOBEC+ cohort
-  X.nmf.factor.apobec = grepmi('APOBEC',X.nmf.factor.name);
-  X.pat.frac_apobec = sum(X.pat.nmf_norm(:,X.nmf.factor.apobec),2);
-
-  % signatures to exclude from APOBEC+ cohort
-  X.nmf.factor.msupe = grepmi('MSI|Smoking|(UV|TMZ)|POLE|ESO',X.nmf.factor.name);
-  X.pat.msupe_neg = all(X.pat.nmf_norm(:,X.nmf.factor.msupe)<0.1,2);
 end
+
+% find closest reference sequence (by cosine distance)
+[mx ord] = max(S.factor.cos,[],1);
+X.nmf.factor.name = S.factor.name(ord);
+X.nmf.factor.cos = as_column(mx);
+
+% signatures to exclude from APOBEC+ cohort
+X.nmf.factor.msupe = grepmi('MSI|Smoking|(UV|TMZ)|POLE|ESO',X.nmf.factor.name);
+X.pat.msupe_neg = all(X.pat.nmf_norm(:,X.nmf.factor.msupe)<0.1,2);
+
+% signature(s) to define the APOBEC+ cohort
+X.nmf.factor.apobec = grepmi('APOBEC',X.nmf.factor.name);
+X.pat.frac_apobec = sum(X.pat.nmf_norm(:,X.nmf.factor.apobec),2);
+randinit(1234); X.pat.logjit_frac_apo = log10(0.01+0.01*rand(slength(X.pat),1)+X.pat.frac_apobec);
+
 
 
