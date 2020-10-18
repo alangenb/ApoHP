@@ -1,4 +1,4 @@
-#ApoHP
+ApoHP
 
 APOBEC hairpins analysis tool
 
