@@ -179,7 +179,7 @@ for minus0=1:4, site_type = [acgt(minus0) 'pC'];
   q.([site_type '_rate']) = ssbin.rate(:,minus0);
   q.([site_type '_sd']) = ssbin.sd(:,minus0);
 end
-save_struct(q,[outdir '/figureS2A.txt']);
+save_struct(q,[outdir '/figureS2b.txt']);
 
 
 % SUPP FIGURE 2B
@@ -224,7 +224,7 @@ for ci=1:4, li=1;
     end
   end
 end
-save_struct(q,[outdir '/figureS2B.txt']);
+save_struct(q,[outdir '/figureS2b.txt']);
 
 fprintf('Finished generating data for figures.\n');
 
