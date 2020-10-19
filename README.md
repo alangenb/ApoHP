@@ -4,12 +4,13 @@
 
 **(C) 2020 Adam Langenbucher and Michael S. Lawrence**
 
-
 [User guide](http://github.com/alangenb/ApoHP/blob/main/ApoHP.user_guide.pdf)
 
 Requires input files:
 	genome reference data for hg19
 	mutation data analyzed in paper
+
+[List of best hairpin sites in hg19](http://github.com/alangenb/ApoHP/blob/main/files/data/processed/best_hairpin_sites.bed.zip)
 
 Files too big to fit on GitHub can be downloaded below:
 
