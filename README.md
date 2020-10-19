@@ -23,6 +23,6 @@ ApoHP.ref_hg19.tar.gz          = reference data for hg19
 
 ApoHP.data_init.tar.gz         = mutation data analyzed in paper
 
-ApoHP.data_processed.tar.gz    = allCsfile and processed mutation data
+ApoHP.data_processed.tar.gz    = all-Cs file and processed mutation data
 
 ApoHP.figs.tar.gz              = figures
