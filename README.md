@@ -7,8 +7,8 @@
 [User guide](http://github.com/alangenb/ApoHP/blob/main/ApoHP.user_guide.pdf)
 
 Requires input files:
-	genome reference data for hg19
-	mutation data analyzed in paper
+* genome reference data for hg19
+* mutation data analyzed in paper
 
 Small files are include in this GitHub respository in [files](./files)
 
@@ -18,23 +18,23 @@ Files too big to fit on GitHub can be downloaded below:
 
 Available at this site:
 
-ApoHP source and compiled executable
+* ApoHP source and compiled executable
 
-   ApoHP.src.tar.gz = source code
+  * ApoHP.src.tar.gz = source code
 
-   ApoHP.bin.tar.gz = compiled executable
+  * ApoHP.bin.tar.gz = compiled executable
 
-ApoHP input files
+* ApoHP input files
 
-   ApoHP.ref_hg19.tar.gz          = reference data for hg19
+  * ApoHP.ref_hg19.tar.gz          = reference data for hg19
 
-   ApoHP.data_init.tar.gz         = mutation data analyzed in paper
+  * ApoHP.data_init.tar.gz         = mutation data analyzed in paper
 
-ApoHP output files:
+* ApoHP output files:
+ 
+  * ApoHP.data_processed.tar.gz    = all-Cs file and processed mutation data
 
-   ApoHP.data_processed.tar.gz    = all-Cs file and processed mutation data
-
-   ApoHP.figs.tar.gz              = figures
+  * ApoHP.figs.tar.gz              = figures
 
 
 List of best hairpin sites in hg19: [best_hairpin_sites.bed.zip](http://github.com/alangenb/ApoHP/blob/main/files/data/processed/best_hairpin_sites.bed.zip)
