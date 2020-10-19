@@ -1,5 +1,5 @@
 topdir = '/path/to/ApoHP';
-srcdir = [topdir '/matlab_repo/'];
+srcdir = [topdir '/src/'];
 addpath(srcdir);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
