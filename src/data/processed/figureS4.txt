@@ -1,0 +1,4 @@
+bias_type	tpc_bias	vpc_bias
+replication	8.317255e-01	4.777817e-01
+transcription	4.036306e-02	1.512779e-01
+fragile_sites	2.361423e-02	6.269847e-02
