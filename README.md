@@ -5,7 +5,7 @@
 **(C) 2020 Adam Langenbucher and Michael S. Lawrence**
 
 
-[User guide](ApoHP_user_guide.pdf)
+[User guide](./ApoHP_user_guide.pdf)
 
 
 Distribution package containing:
