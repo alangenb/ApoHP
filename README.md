@@ -10,11 +10,14 @@ Requires input files:
 * genome reference data for hg19
 * mutation data analyzed in paper
 
-Small files are included here in this GitHub respository in [files](./files)
+Small input/output files are included here in this GitHub respository in the folder [files/](./files)
+
+Including:
+* List of best hairpin sites in hg19: [best_hairpin_sites.bed.zip](http://github.com/alangenb/ApoHP/blob/main/files/data/processed/best_hairpin_sites.bed.zip)
 
 Files too big to fit on GitHub are available at the following link:
 
-[Download site](http://www.dropbox.com/sh/8hiyfv542f1i6sy/AABnd-gmXo8y2TA3Z7k-VJN_a?dl=0)
+[Download link](http://www.dropbox.com/sh/8hiyfv542f1i6sy/AABnd-gmXo8y2TA3Z7k-VJN_a?dl=0)
 
 Available at this link:
 
@@ -35,10 +38,4 @@ Available at this link:
   * ApoHP.data_processed.tar.gz    = all-Cs file and processed mutation data
 
   * ApoHP.figs.tar.gz              = figures
-
-
-Also available here on this Github:
-
-  * List of best hairpin sites in hg19: [best_hairpin_sites.bed.zip](http://github.com/alangenb/ApoHP/blob/main/files/data/processed/best_hairpin_sites.bed.zip)
-
 
