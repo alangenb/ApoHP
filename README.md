@@ -5,11 +5,7 @@
 **(C) 2020 Adam Langenbucher and Michael S. Lawrence**
 
 
-User guide:
-
-Download from:
-
-http://personal.broadinstitute.org/lawrence/ApoHP/ApoHP_user_guide.pdf
+[User guide](ApoHP_user_guide.pdf)
 
 
 Distribution package containing:
