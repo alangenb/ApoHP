@@ -4,7 +4,7 @@
 
 **(C) 2020 Adam Langenbucher and Michael S. Lawrence**
 
-User guide: [APoHP.user_guide.pdf](http://github.com/alangenb/ApoHP/blob/main/ApoHP.user_guide.pdf)
+User guide: [ApoHP.user_guide.pdf](http://github.com/alangenb/ApoHP/blob/main/ApoHP.user_guide.pdf)
 
 Requires input files:
 * genome reference data for hg19
