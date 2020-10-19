@@ -5,16 +5,22 @@
 **(C) 2020 Adam Langenbucher and Michael S. Lawrence**
 
 
-[User guide](https://github.com/alangenb/ApoHP/blob/main/ApoHP.user_guide.pdf)
+[User guide](http://github.com/alangenb/ApoHP/blob/main/ApoHP.user_guide.pdf)
 
-
-Distribution package containing:
-	compiled executable
-	source code
+Requires input files:
 	genome reference data for hg19
 	mutation data analyzed in paper
-	output data and figures
 	
-Download from:
+[Downloads available:](http://www.dropbox.com/sh/8hiyfv542f1i6sy/AABnd-gmXo8y2TA3Z7k-VJN_a?dl=0)
 
-http://personal.broadinstitute.org/lawrence/ApoHP/ApoHP_and_data.v1.0.tar.gz
+ApoHP.src.tar.gz               = source code
+
+ApoHP.bin.tar.gz               = compiled executable
+
+ApoHP.ref_hg19.tar.gz          = reference data for hg19
+
+ApoHP.data_init.tar.gz         = mutation data analyzed in paper
+
+ApoHP.data_processed.tar.gz    = allCsfile and processed mutation data
+
+ApoHP.figs.tar.gz              = figures
