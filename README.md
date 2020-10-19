@@ -4,7 +4,7 @@
 
 **(C) 2020 Adam Langenbucher and Michael S. Lawrence**
 
-[User guide](http://github.com/alangenb/ApoHP/blob/main/ApoHP.user_guide.pdf)
+User guide: [APoHP.user_guide.pdf](http://github.com/alangenb/ApoHP/blob/main/ApoHP.user_guide.pdf)
 
 Requires input files:
 * genome reference data for hg19
@@ -15,9 +15,7 @@ Small input/output files are included here in this GitHub respository in the fol
 Including:
 * List of best hairpin sites in hg19: [best_hairpin_sites.bed.zip](http://github.com/alangenb/ApoHP/blob/main/files/data/processed/best_hairpin_sites.bed.zip)
 
-Files too big to fit on GitHub are available at the following link:
-
-[Download link](http://www.dropbox.com/sh/8hiyfv542f1i6sy/AABnd-gmXo8y2TA3Z7k-VJN_a?dl=0)
+Files too big to fit on GitHub are available at the following link:  [Download link](http://www.dropbox.com/sh/8hiyfv542f1i6sy/AABnd-gmXo8y2TA3Z7k-VJN_a?dl=0)
 
 Available at this link:
 
