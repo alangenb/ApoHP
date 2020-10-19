@@ -16,9 +16,10 @@ Including:
 * List of best hairpin sites in hg19: [best_hairpin_sites.bed.zip](http://github.com/alangenb/ApoHP/blob/main/files/data/processed/best_hairpin_sites.bed.zip)
 
 Files too big to fit on GitHub are available at the following site:
+
 [Downloads site](http://www.dropbox.com/sh/8hiyfv542f1i6sy/AABnd-gmXo8y2TA3Z7k-VJN_a?dl=0)
 
-Available at the above site:
+There the following zip archives are available:
 
 * ApoHP source and compiled executable
 
