@@ -10,7 +10,7 @@ Requires input files:
 * genome reference data for hg19
 * mutation data analyzed in paper
 
-Small input/output files are included here in this GitHub respository in the folder [files/](./files)
+Input/output files are included here in this GitHub respository in the folder [files/](./files)
 
 Including:
 * List of best hairpin sites in hg19: [best_hairpin_sites.bed.zip](http://github.com/alangenb/ApoHP/blob/main/files/data/processed/best_hairpin_sites.bed.zip)
