@@ -2,7 +2,8 @@ function ApoHP(varargin)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % APOBEC hairpins analysis tool
-% (C) 2020 Adam Langenbucher and Michael S. Lawrence
+% (C) 2021 Adam Langenbucher and Michael S. Lawrence
+% Nature Communications https://www.nature.com/articles/s41467-021-21891-0
 %
 % ApoHP <command> <args>
 %
