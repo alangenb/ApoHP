@@ -1,12 +1,15 @@
 function ApoHP(varargin)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
+% ApoHP
+%
 % APOBEC hairpins analysis tool
-% (C) 2020 Adam Langenbucher and Michael S. Lawrence
+% v2.0
+% (C) 2022 Adam Langenbucher, Ramin Sakhtemani, Michael S. Lawrence
 %
 % ApoHP <command> <args>
 %
-% command = { survey_hairpins, analyze_mutations, superimpose_data }
+% command = { survey_hairpins, survey_hairpins_rna, analyze_mutations, superimpose_data }
 %
 % ApoHP survey_hairpins <refdir> <outdir> [<blockno>]
 % --> reads genomic DNA reference data from <refdir>
@@ -20,7 +23,6 @@ function ApoHP(varargin)
 % ApoHP survey_hairpins_rna <refdir> <rna_outdir> [<blockno>]
 % --> same as above, but considers spliced transcribed RNA sequences instead of genomic DNA sequences
 % --> same input reference files
-% --> same output files, with NaN everywhere except spliced transcribed RNA cytosines 
 %
 % ApoHP analyze_mutations <refdir> <mutationfile> <ttypefile> <sigfile> <k> <allCsfile> <datoutdir> <figoutdir> <wxs_mutationfile> <wxs_sigfile> <wxs_k>
 % --> reads mutations from input file
@@ -49,7 +51,7 @@ function ApoHP(varargin)
 % --> writes output data tables in <datoutdir>
 
 fprintf('ApoHP:  APOBEC hairpins analysis tool\n');  
-fprintf('(C) 2020 Adam Langenbucher and Michael S. Lawrence\n\n');
+fprintf('(C) 2022 Adam Langenbucher, Ramin Sakhtemani, Michael S. Lawrence\n\n');
 
 if nargin<1, error('usage: ApoHP <command> <args>'); end
 command = varargin{1};
