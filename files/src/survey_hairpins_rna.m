@@ -80,7 +80,7 @@ for txi=1:length(tx), fprintf('%d/%d ',txi,length(tx));
   for e=forfrom:forstep:forto
     st = X.tx.exon_starts{i}(e); en = X.tx.exon_ends{i}(e);
     if plusstrand, p = (st:en)'; d = ref(st:en);
-    else p = (en:-1:st)'; d = 5-ref(en:-1:st)';
+    else p = (en:-1:st)'; d = 5-ref(en:-1:st);
     end
     R.ref = [R.ref;d]; R.pos = [R.pos;p];
   end
