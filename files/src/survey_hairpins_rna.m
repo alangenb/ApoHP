@@ -5,7 +5,7 @@ function X = survey_hairpins_rna(refdir,outdir,blockno)
 
 minlooplen=3;      % consider loops of at least 3nt
 maxlooplen=11;     % consider loops of at most 11nt
-maxstem=20;        % consider stems of up to 20bp (reduces dead zones at ends of transcripts)
+maxstem=20;        % consider stems of up to 20bp (reducing from 100bp to 20bp reduces dead zones at ends of transcripts)
 minbulgepos=2;     % consider hairpins with bulges at least 2bp away from loop
 maxbulgepos=8;     % consider hairpins with bulges up to 8bp away from loop
 minmismatchpos=2;  % consider hairpins with mismatches in the stem at least 2 bp away from loop
@@ -79,8 +79,9 @@ for txi=1:length(tx), fprintf('%d/%d ',txi,length(tx));
   end
   for e=forfrom:forstep:forto
     st = X.tx.exon_starts{i}(e); en = X.tx.exon_ends{i}(e);
-    d = ref(st:en);
-    if plusstrand, p=(st:en)'; else p=(en:-1:st)'; d = 5-d; end
+    if plusstrand, p = (st:en)'; d = ref(st:en);
+    else p = (en:-1:st)'; d = 5-ref(en:-1:st)';
+    end
     R.ref = [R.ref;d]; R.pos = [R.pos;p];
   end
   
