@@ -153,7 +153,7 @@ for txi=1:length(tx), fprintf('%d/%d ',txi,length(tx));
     pos = R.pos(ri);
     xi = pos-offset;
     if xi>=1 & xi<=ns
-      if R.ss(ri)>X.site.ss(xi)
+      if R.ss(ri)>X.site.ss(xi) || (R.ss(ri)==X.site.ss(xi) && R.looplen(ri)<X.site.looplen(xi))
         X.site.gene(xi) = gene;
         for fi=1:length(fs),f=fs{fi}; X.site.(f)(xi) = R.(f)(ri); end
       end
