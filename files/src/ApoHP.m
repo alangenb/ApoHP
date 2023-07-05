@@ -2,24 +2,29 @@ function ApoHP(varargin)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % APOBEC hairpins analysis tool
-% (C) 2021 Adam Langenbucher and Michael S. Lawrence
-% Nature Communications https://www.nature.com/articles/s41467-021-21891-0
+% (C) 2020 Adam Langenbucher and Michael S. Lawrence
 %
 % ApoHP <command> <args>
 %
 % command = { survey_hairpins, analyze_mutations, superimpose_data }
 %
-% apoHP survey_hairpins <refdir> <outdir> [<blockno>]
-% --> reads genomic reference data from <refdir>
-% --> scans each genomic block for hairpins (saves temporary block files in outdir>
+% ApoHP survey_hairpins <refdir> <outdir> [<blockno>]
+% --> reads genomic DNA reference data from <refdir>
+% --> scans each genomic DNA block for hairpins (saves temporary block files in outdir>
 % --> collects all blocks
 % --> NOTE: <blockno> can be specified if running in parallel (specify -1 to perform "gather" step after all blocks have finished)
 % --> writes <outdir>/allCs.mat                with list of all Cs in genome and their hairpin characteristics
 % --> writes <outdir>/best_hairpin_sites.mat   with list of best hairpin Cs (3/3 ss>=10, 4/[4 or 5] ss>=12)
 % --> writes <outdir>/best_hairpin_sites.bed   (same but in text format)
 %
+% ApoHP survey_hairpins_rna <refdir> <rna_outdir> [<blockno>]
+% --> same as above, but considers spliced transcribed RNA sequences instead of genomic DNA sequences
+% --> same input reference files
+% --> same output files, with NaN everywhere except spliced transcribed RNA cytosines 
+%
 % ApoHP analyze_mutations <refdir> <mutationfile> <ttypefile> <sigfile> <k> <allCsfile> <datoutdir> <figoutdir> <wxs_mutationfile> <wxs_sigfile> <wxs_k>
 % --> reads mutations from input file
+% --> reads hairpin info from allCsfile from survey_hairpins (DNA version)
 % --> runs NMF to discover <k> mutation signatures
 % --> maps mutations to allCs file
 % --> identifies 10%, 50%, and 90% APOBEC cohorts, including or excluding MSUPE patients
@@ -34,6 +39,7 @@ function ApoHP(varargin)
 %
 % ApoHP superimpose_data <refdir> <mutationfile> <ttypefile> <sigfile> <k> <allCsfile> <fig3file> <datoutdir> <figoutdir>
 % --> loads user-provided mutation data from <newmutfile>
+% --> reads hairpin info from allCsfile from survey_hairpins (DNA version)
 % --> combines user-provided mutation set with pan-cancer mutation set
 % --> runs NMF to determine frac_APOBEC mutational signature loading
 % --> maps user-provided mutation set to annotated C:G basepair object
@@ -51,14 +57,14 @@ command = varargin{1};
 fprintf('command: %s\n\n',command)
 
 if strcmp(command, 'survey_hairpins')
-
   if nargin<3, error('requires two arguments: refdir and outdir'); end
   refdir = varargin{2};
   outdir = varargin{3};
   blockno = nan;
   if nargin>=4
-    blockno = num2str(varargin{4});
-    if ~(blockno>=1 || blockno==-1 && blockno==round(blockno)), error('blockno not valid (should be {1,2,...,#blocks} or -1 for gather'); end
+    blockno = varargin{4};
+    if ischar(blockno), blockno = str2double(blockno); end
+    if ~((blockno>=1 || blockno==-1) && blockno==round(blockno)), error('blockno not valid (should be {1,2,...,#blocks} or -1 for gather'); end
   end 
   if nargin>4, error('Too many input arguments'); end
 
@@ -75,6 +81,35 @@ if strcmp(command, 'survey_hairpins')
     survey_hairpins(refdir,outdir,blockno);
   elseif blockno==-1                               % parallel mode: "gather"
     survey_hairpins_gather(refdir,outdir);
+  else
+    error('blockno %d out of range',blockno);
+  end
+
+elseif strcmp(command, 'survey_hairpins_rna')
+  if nargin<3, error('requires two arguments: refdir and outdir'); end
+  refdir = varargin{2};
+  outdir = varargin{3};
+  blockno = nan;
+  if nargin>=4
+    blockno = varargin{4};
+    if ischar(blockno), blockno = str2double(blockno); end
+    if ~((blockno>=1 || blockno==-1) && blockno==round(blockno)), error('blockno not valid (should be {1,2,...,#blocks} or -1 for gather'); end
+  end
+  if nargin>4, error('Too many input arguments'); end
+  
+  X = load_genome_info(refdir);
+  fprintf('Number of 10Mb blocks in genome to consider for overlapping transcripts: %d\n',slength(X.block));
+  
+  if isnan(blockno)                                % non-parallel mode: run as loop
+    fprintf('Surveying transcriptome for hairpins (%d blocks).\n',slength(X.block));
+    for blockno=1:slength(X.block)
+      survey_hairpins_rna(refdir,outdir,blockno);
+    end
+    survey_hairpins_rna_gather(refdir,outdir);
+  elseif blockno>=1 && blockno<=slength(X.block)   % parallel mode: "scatter"
+    survey_hairpins_rna(refdir,outdir,blockno);
+  elseif blockno==-1                               % parallel mode: "gather"
+    survey_hairpins_rna_gather(refdir,outdir);
   else
     error('blockno %d out of range',blockno);
   end
@@ -96,3 +131,4 @@ else
 end
 
 fprintf('\nApoHP finished successfully.\n');
+
