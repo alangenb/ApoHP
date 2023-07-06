@@ -1,8 +1,8 @@
 function X = survey_hairpins_rna_gather(refdir,datdir)
 % gather C's from all blocks (RNA MODE)
 % --> write full data object <datdir>/RNA_sense_Cs.mat
-% --> also saves <datdir>/best_RNA_sense_hairpin_sites.mat
-% --> also saves <datdir>/best_RNA_sense_hairpin_sites.bed
+% --> also saves <datdir>/best_RNA_sense_C_hairpin_sites.mat
+% --> also saves <datdir>/best_RNA_sense_C_hairpin_sites.bed
 
 X = load_genome_info(refdir);
 
@@ -20,10 +20,11 @@ for blockno=1:slength(X.block),fprintf('BLOCK %d\n',blockno);
   % trim interblock overlaps 
   tmp = reorder_struct(tmp,(1+X.block.st_trim(blockno)-X.block.st(blockno)):(1+X.block.en_trim(blockno)-X.block.st(blockno)));
   % keep sense-strand C sites only
-  X.site{blockno} = reorder_struct(tmp,(X.gene.plus_strand(tmp.gene)==1 & tmp.ref==2) | (X.gene.plus_strand(tmp.gene)==0 & tmp.ref==3));
+  X.site{blockno} = reorder_struct(tmp,(tmp.txplus & tmp.ref==2) | (tmp.txminus & tmp.ref==3));
 end
 X.site=concat_structs(X.site);
 
+% CAUC hairpins
 besthp = reorder_struct(X.site,(X.site.looplen==4 & X.site.looppos==4 & X.site.ss>=8 & X.site.minus0==4 & X.site.minus1==1 & X.site.minus2==2));
 save([datdir '/best_RNA_sense_C_hairpin_sites.mat'],'besthp','-v7.3');
 

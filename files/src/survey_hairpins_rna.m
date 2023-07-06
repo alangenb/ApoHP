@@ -25,7 +25,7 @@ ede(outdir);
 outfile = [outdir '/' X.block.name{blockno} '.rna.mat'];
 if exist(outfile,'file')
   fprintf('Output file already exists.\n');
-%  return
+  return
 end
 write_textfile('IN_PROGRESS',outfile);
 fprintf('BLOCK %d\n',blockno);
@@ -57,7 +57,8 @@ tmp=X.site.plus2(ga); X.site.plus2(ga)=5-X.site.minus1(ga); X.site.minus1(ga)=5-
 tmp=X.site.plus3(ga); X.site.plus3(ga)=5-X.site.minus2(ga); X.site.minus2(ga)=5-tmp;
 
 X.site.gene = zeros(ns,1,'uint16');
-X.site.plusstrand = zeros(ns,1,'uint8');
+X.site.txplus = zeros(ns,1,'uint8');
+X.site.txminus = zeros(ns,1,'uint8');
 fs = {'looplen','looppos','bulgepos','nbp','ngc','mmp','ss'};
 for i=1:length(fs), X.site.(fs{i}) = -ones(ns,1,'int8'); end
 
@@ -79,13 +80,13 @@ for txi=1:length(tx), fprintf('%d/%d ',txi,length(tx));
   R=[];
   R.ref = []; R.pos = [];
   gene = X.tx.gene_idx(i);
-  plusstrand = strcmp(X.tx.strand{i},'+');
-  if plusstrand, forfrom=1; forstep=+1; forto=X.tx.n_exons(i);
+  txplus = strcmp(X.tx.strand{i},'+');
+  if txplus, forfrom=1; forstep=+1; forto=X.tx.n_exons(i);
   else forfrom=X.tx.n_exons(i); forstep=-1; forto=1;
   end
   for e=forfrom:forstep:forto
     st = X.tx.exon_starts{i}(e); en = X.tx.exon_ends{i}(e);
-    if plusstrand, p = (st:en)'; d = ref(st:en);
+    if txplus, p = (st:en)'; d = ref(st:en);
     else p = (en:-1:st)'; d = 5-ref(en:-1:st);
     end
     R.ref = [R.ref;d]; R.pos = [R.pos;p];
@@ -160,7 +161,8 @@ for txi=1:length(tx), fprintf('%d/%d ',txi,length(tx));
     if xi>=1 & xi<=ns
       if R.ss(ri)>X.site.ss(xi) || (R.ss(ri)==X.site.ss(xi) && R.looplen(ri)<X.site.looplen(xi))
         X.site.gene(xi) = gene;
-        X.site.plusstrand(xi) = plusstrand;
+        if txplus, X.site.txplus(xi) = 1; end
+        if ~txplus, X.site.txminus(xi) = 1; end
         for fi=1:length(fs),f=fs{fi}; X.site.(f)(xi) = R.(f)(ri); end
       end
     end
