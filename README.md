@@ -2,7 +2,7 @@
 
 # APOBEC hairpins analysis tool
 
-**(C) 2022 Adam Langenbucher, Ramin Sakhtemani, Michael S. Lawrence**
+**(C) 2023 Adam Langenbucher, Ramin Sakhtemani, Michael S. Lawrence**
 
 User guide: [ApoHP.user_guide.pdf](http://github.com/alangenb/ApoHP/blob/main/ApoHP.user_guide.pdf)
 
