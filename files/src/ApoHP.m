@@ -5,7 +5,7 @@ function ApoHP(varargin)
 %
 % APOBEC hairpins analysis tool
 % v2.0
-% (C) 2022 Adam Langenbucher, Ramin Sakhtemani, Michael S. Lawrence
+% (C) 2023 Adam Langenbucher, Ramin Sakhtemani, Michael S. Lawrence
 %
 % ApoHP <command> <args>
 %
@@ -51,7 +51,7 @@ function ApoHP(varargin)
 % --> writes output data tables in <datoutdir>
 
 fprintf('ApoHP v2.0:  APOBEC hairpins analysis tool\n');  
-fprintf('(C) 2022 Adam Langenbucher, Ramin Sakhtemani, Michael S. Lawrence\n\n');
+fprintf('(C) 2023 Adam Langenbucher, Ramin Sakhtemani, Michael S. Lawrence\n\n');
 
 if nargin<1, error('usage: ApoHP <command> <args>'); end
 command = varargin{1};
