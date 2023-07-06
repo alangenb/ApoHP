@@ -50,7 +50,7 @@ function ApoHP(varargin)
 % --> writes figures in <figoutdir>
 % --> writes output data tables in <datoutdir>
 
-fprintf('ApoHP:  APOBEC hairpins analysis tool\n');  
+fprintf('ApoHP v2.0:  APOBEC hairpins analysis tool\n');  
 fprintf('(C) 2022 Adam Langenbucher, Ramin Sakhtemani, Michael S. Lawrence\n\n');
 
 if nargin<1, error('usage: ApoHP <command> <args>'); end
@@ -100,7 +100,7 @@ elseif strcmp(command, 'survey_hairpins_rna')
   if nargin>4, error('Too many input arguments'); end
   
   X = load_genome_info(refdir);
-  fprintf('Number of 10Mb blocks in genome to consider for overlapping transcripts: %d\n',slength(X.block));
+  fprintf('Number of 10Mb blocks in genome: %d\n',slength(X.block));
   
   if isnan(blockno)                                % non-parallel mode: run as loop
     fprintf('Surveying transcriptome for hairpins (%d blocks).\n',slength(X.block));
