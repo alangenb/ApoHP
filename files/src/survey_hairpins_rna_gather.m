@@ -1,8 +1,8 @@
 function X = survey_hairpins_rna_gather(refdir,datdir)
 % gather C's from all blocks (RNA MODE)
 % --> write full data object <datdir>/RNA_sense_Cs.mat
-% --> also saves <datdir>/best_RNA_sense_hairpin_sites.mat
-% --> also saves <datdir>/best_RNA_sense_hairpin_sites.bed
+% --> also saves <datdir>/best_RNA_sense_C_hairpin_sites.mat
+% --> also saves <datdir>/best_RNA_sense_C_hairpin_sites.bed
 
 X = load_genome_info(refdir);
 
