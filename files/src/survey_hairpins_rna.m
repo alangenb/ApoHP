@@ -25,7 +25,7 @@ ede(outdir);
 outfile = [outdir '/' X.block.name{blockno} '.rna.mat'];
 if exist(outfile,'file')
   fprintf('Output file already exists.\n');
-  return
+%  return
 end
 write_textfile('IN_PROGRESS',outfile);
 fprintf('BLOCK %d\n',blockno);
@@ -50,7 +50,14 @@ X.site.plus1   = [X.site.ref(2:end);0];
 X.site.plus2   = [X.site.ref(3:end);0;0];
 X.site.plus3   = [X.site.ref(4:end);0;0;0];
 
+% for G/A positions on sense strand, flip annotations to opposite strand so that we're always talking about C/T's
+ga = (X.site.ref==3 | X.site.ref==1);
+tmp=X.site.plus1(ga); X.site.plus1(ga)=5-X.site.minus0(ga); X.site.minus0(ga)=5-tmp;
+tmp=X.site.plus2(ga); X.site.plus2(ga)=5-X.site.minus1(ga); X.site.minus1(ga)=5-tmp;
+tmp=X.site.plus3(ga); X.site.plus3(ga)=5-X.site.minus2(ga); X.site.minus2(ga)=5-tmp;
+
 X.site.gene = zeros(ns,1,'uint16');
+X.site.plusstrand = zeros(ns,1,'uint8');
 fs = {'looplen','looppos','bulgepos','nbp','ngc','mmp','ss'};
 for i=1:length(fs), X.site.(fs{i}) = -ones(ns,1,'int8'); end
 
@@ -64,7 +71,6 @@ mask = maxstem+maxlooplen-1;   % mask block edges (interblock overlap of 1kb wil
 % HAIRPIN SURVEY (RNA MODE)
 
 fprintf('Surveying hairpins (RNA MODE).\n');
-
 fprintf('Transcript: ');
 for txi=1:length(tx), fprintf('%d/%d ',txi,length(tx));
   i=tx(txi);
@@ -87,7 +93,6 @@ for txi=1:length(tx), fprintf('%d/%d ',txi,length(tx));
   
   gc = int8(R.ref==3 | R.ref==2); % (makes things quicker in loop)
 
-  fs = {'plusstrand','looplen','looppos','bulgepos','nbp','ngc','mmp','ss'};
   nr = slength(R);
   for i=1:length(fs), R.(fs{i}) = -ones(nr,1,'int8'); end
 
@@ -148,26 +153,20 @@ for txi=1:length(tx), fprintf('%d/%d ',txi,length(tx));
     end
   end
 
-  % INTEGRATE INTO SITE LIST
+  % INTEGRATE INTO GENOMIC SITE LIST
   for ri=1:nr
     pos = R.pos(ri);
     xi = pos-offset;
     if xi>=1 & xi<=ns
       if R.ss(ri)>X.site.ss(xi) || (R.ss(ri)==X.site.ss(xi) && R.looplen(ri)<X.site.looplen(xi))
         X.site.gene(xi) = gene;
+        X.site.plusstrand(xi) = plusstrand;
         for fi=1:length(fs),f=fs{fi}; X.site.(f)(xi) = R.(f)(ri); end
       end
     end
   end
 
 end  % next transcript
-
-% for G/A positions on sense strand, flip annotations to opposite strand so that we're always talking about C/T's
-ga = (X.site.ref==3 | X.site.ref==1);
-tmp=X.site.plus1(ga); X.site.plus1(ga)=5-X.site.minus0(ga); X.site.minus0(ga)=5-tmp;
-tmp=X.site.plus2(ga); X.site.plus2(ga)=5-X.site.minus1(ga); X.site.minus1(ga)=5-tmp;
-tmp=X.site.plus3(ga); X.site.plus3(ga)=5-X.site.minus2(ga); X.site.minus2(ga)=5-tmp;
-% Note: looppos and bulgepos are already correct and don't need to be flipped
 
 % save
 fprintf('\nSaving block %d... ',blockno);
